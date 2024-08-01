@@ -43,7 +43,7 @@ pipeline{
             when{ expression { params.action == 'create' } }
             steps{
                 script{
-                    withCredentials([string(credentialsId: 'jenkins-sonar-token', variable: '')])
+                    withCredentials([string(credentialsId: 'jenkins-sonar-token', variable: 'sonar-token')])
                     sh 'mvn -f Java_app/pom.xml clean package sonar:sonar'
                 }
             }
@@ -52,7 +52,7 @@ pipeline{
             when { expression { params.action == 'create' } }
             steps{
                 script{
-                    withCredentials([string(credentialsId: 'jenkins-sonar-token', variable: '')])
+                    withCredentials([string(credentialsId: 'jenkins-sonar-token', variable: 'sonar-token')])
                     waitForQualityGate abortPipeline: true
                 }
             }
