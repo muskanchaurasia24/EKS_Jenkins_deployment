@@ -28,10 +28,7 @@ pipeline{
         stage('Git CheckOut'){
             when { expression { params.action == 'create' } }
             steps{
-                gitCheckout(
-                    branch: 'main',
-                    url: "https://github.com/muskanchaurasia24/EKS_Jenkins_deployment.git"
-                )
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/muskanchaurasia24/EKS_Jenkins_deployment.git']])
             }
         }
         stage('Unit Test Maven'){
