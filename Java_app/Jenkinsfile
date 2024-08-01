@@ -6,15 +6,26 @@ pipeline{
             name: 'action',
             choices: 'create/delete',
             description: 'Choose create/Destroy' )
+            string(
+                name: 'awsAccountId', 
+                description: " AWS Account ID", 
+                defaultValue: '')
+            string(
+                name: 'Region',
+                description: "Region of ECR", 
+                defaultValue: '')
+             string(
+                name: 'EcrRepoName', 
+                description: "name of the ECR", 
+                defaultValue: '')
     }
     environment{
-        ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
-        SECRET_KEY = credentials('AWS_SECRET_KEY_ID')
-        AWS_ACCOUNT_ID = ''
-        AWS_REGION = 'us-east-1'
-        ECR_REPOSITORY = 'java_app'
-        IMAGE_NAME = 'demoApp'
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        // ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
+        // SECRET_KEY = credentials('AWS_SECRET_KEY_ID')
+        AWS_ACCOUNT_ID = { params.awsAccountId }
+        REGION = { params.Region }
+        ECR_REPOSITORY = { params.EcrRepoName }
+        ecrUrl = "${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com"
     }
     stages{
         stage('Git CheckOut'){
@@ -62,9 +73,12 @@ pipeline{
             when { expression { params.action == 'create' } }
             steps{
                 script{
+                    
                     sh """
-                      docker build -t ${} .
-                      docker tag 
+                      docker build -t ${ECR_REPOSITORY} .
+                      docker tag ${ECR_REPOSITORY}:latest ${ecrUrl}/${ECR_REPOSITORY}:latest
+                      docker tag ${ECR_REPOSITORY}:${BUILD_NUMBER} ${ecrUrl}/${ECR_REPOSITORY}:${BUILD_NUMBER}
+                      
                     """
                 }
             }
@@ -72,7 +86,13 @@ pipeline{
         stage('Docker Image Push : ECR'){
             when { expression { params.action == 'create' } }
             steps{
-                
+                script{
+                    sh """
+                      aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
+                      docker push ${ecrUrl}/${ECR_REPOSITORY}:${BUILD_NUMBER}
+                      docker push ${ecrUrl}/${ECR_REPOSITORY}:latest
+                    """
+                }
             }
         }
 
