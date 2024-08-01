@@ -1,0 +1,80 @@
+pipeline{
+
+    agent any
+    parameters{
+        choice(
+            name: 'action',
+            choices: 'create/delete',
+            description: 'Choose create/Destroy' )
+    }
+    environment{
+        ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
+        SECRET_KEY = credentials('AWS_SECRET_KEY_ID')
+        AWS_ACCOUNT_ID = ''
+        AWS_REGION = 'us-east-1'
+        ECR_REPOSITORY = 'java_app'
+        IMAGE_NAME = 'demoApp'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+    stages{
+        stage('Git CheckOut'){
+            when { expression { params.action == 'create' } }
+            steps{
+                gitCheckout(
+                    branch: 'main',
+                    url: "https://github.com/muskanchaurasia24/EKS_Jenkins_deployment.git"
+                )
+            }
+        }
+        stage('Unit Test Maven'){
+            when { expression { params.action == 'create' } }
+            steps{
+                script{
+                    sh 'mvn test'
+                }
+            }
+        }
+        stage('Static Code Analysis: SonarQube'){
+            when{ expression { params.action == 'craete' } }
+            steps{
+                script{
+                    sh 'mvn clean package sonar:sonar'
+                }
+            }
+        }
+        stage('Quality Gate Status check : Sonarqube'){
+            when { expression { params.action == 'create' } }
+            steps{
+                script{
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage("Maven Build: maven"){
+            when { expression { params.action == 'create' } }
+            steps{
+                script{
+                    sh 'mvn clean install'
+                }
+            }
+        }  
+        stage('Docker Image Build: ECR'){
+            when { expression { params.action == 'create' } }
+            steps{
+                script{
+                    sh """
+                      docker build -t ${} .
+                      docker tag 
+                    """
+                }
+            }
+        }
+        stage('Docker Image Push : ECR'){
+            when { expression { params.action == 'create' } }
+            steps{
+                
+            }
+        }
+
+    }
+}
