@@ -35,7 +35,7 @@ pipeline{
             when { expression { params.action == 'create' } }
             steps{
                 script{
-                    sh 'mvn test'
+                    sh 'mvn -f Java_app/pom.xml test'
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline{
             when{ expression { params.action == 'craete' } }
             steps{
                 script{
-                    sh 'mvn clean package sonar:sonar'
+                    sh 'mvn -f Java_app/pom.xml clean package sonar:sonar'
                 }
             }
         }
@@ -59,7 +59,7 @@ pipeline{
             when { expression { params.action == 'create' } }
             steps{
                 script{
-                    sh 'mvn clean install'
+                    sh 'mvn -f Java_app/pom.xml clean install'
                 }
             }
         }  
