@@ -40,7 +40,7 @@ pipeline{
             }
         }
         stage('Static Code Analysis: SonarQube'){
-            when{ expression { params.action == 'craete' } }
+            when{ expression { params.action == 'create' } }
             steps{
                 script{
                     sh 'mvn -f Java_app/pom.xml clean package sonar:sonar'
