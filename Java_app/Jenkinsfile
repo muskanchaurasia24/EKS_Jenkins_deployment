@@ -2,10 +2,9 @@ pipeline{
 
     agent any
     parameters{
-        choice(
-            name: 'action',
-            choices: 'create/delete',
-            description: 'Choose create/Destroy' )
+        choice (choices: ['create', 'destroy'],
+              description: 'Choose create/Destroy',
+               name: 'action')
             string(
                 name: 'AWS_ACCOUNT_ID', 
                 description: " AWS Account ID", 
