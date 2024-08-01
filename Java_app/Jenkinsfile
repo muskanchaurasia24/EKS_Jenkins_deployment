@@ -7,24 +7,24 @@ pipeline{
             choices: 'create/delete',
             description: 'Choose create/Destroy' )
             string(
-                name: 'awsAccountId', 
+                name: 'AWS_ACCOUNT_ID', 
                 description: " AWS Account ID", 
                 defaultValue: '')
             string(
-                name: 'Region',
+                name: 'REGION',
                 description: "Region of ECR", 
                 defaultValue: '')
              string(
-                name: 'EcrRepoName', 
+                name: 'ECR_REPOSITORY', 
                 description: "name of the ECR", 
                 defaultValue: '')
     }
     environment{
-        // ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
-        // SECRET_KEY = credentials('AWS_SECRET_KEY_ID')
-        AWS_ACCOUNT_ID = { params.awsAccountId }
-        REGION = { params.Region }
-        ECR_REPOSITORY = { params.EcrRepoName }
+        ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
+        SECRET_KEY = credentials('AWS_SECRET_KEY_ID')
+        // AWS_ACCOUNT_ID = { params.awsAccountId }
+        // REGION = { params.Region }
+        // ECR_REPOSITORY = { params.EcrRepoName }
         ecrUrl = "${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com"
     }
     stages{
