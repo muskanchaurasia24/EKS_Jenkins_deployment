@@ -72,7 +72,7 @@ pipeline{
                 script{
                     
                     sh """
-                      docker build -t ${ECR_REPOSITORY} Java_app/Dockerfile
+                      docker build -t ${ECR_REPOSITORY} .
                       docker tag ${ECR_REPOSITORY}:latest ${ecrUrl}/${ECR_REPOSITORY}:latest
                       docker tag ${ECR_REPOSITORY}:${BUILD_NUMBER} ${ecrUrl}/${ECR_REPOSITORY}:${BUILD_NUMBER}
                       
