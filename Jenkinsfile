@@ -6,15 +6,15 @@ pipeline{
             string(
                 name: 'AWS_ACCOUNT_ID', 
                 description: " AWS Account ID", 
-                defaultValue: '')
+                defaultValue: '471112935543')
             string(
                 name: 'REGION',
                 description: "Region of ECR", 
-                defaultValue: '')
+                defaultValue: 'us-east-1')
              string(
                 name: 'ECR_REPOSITORY', 
                 description: "name of the ECR", 
-                defaultValue: '')
+                defaultValue: 'demo_app')
     }
     environment{
         // ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
