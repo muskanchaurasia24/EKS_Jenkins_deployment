@@ -74,7 +74,7 @@ pipeline{
                     sh """
                       docker build -t ${ECR_REPOSITORY} .
                       docker tag ${ECR_REPOSITORY}:latest ${ecrUrl}/${ECR_REPOSITORY}:latest
-                      docker tag ${ECR_REPOSITORY}:${BUILD_NUMBER} ${ecrUrl}/${ECR_REPOSITORY}:${BUILD_NUMBER}
+                      // docker tag ${ECR_REPOSITORY}:${BUILD_NUMBER} ${ecrUrl}/${ECR_REPOSITORY}:${BUILD_NUMBER}
                       
                     """
                 }
@@ -86,7 +86,7 @@ pipeline{
                 script{
                     sh """
                       aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
-                      docker push ${ecrUrl}/${ECR_REPOSITORY}:${BUILD_NUMBER}
+                      // docker push ${ecrUrl}/${ECR_REPOSITORY}:${BUILD_NUMBER}
                       docker push ${ecrUrl}/${ECR_REPOSITORY}:latest
                     """
                 }
