@@ -57,6 +57,41 @@ pipeline{
                     waitForQualityGate abortPipeline: true
                 }
             }
+            post {
+                failure {
+                    emailext (
+                        to: 'muskan.chaurasia@nagarro.com',
+                        subject: "Jenkins: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Quality Gate Failed",
+                        body: """
+                        <p>Hi Team,</p>
+                        <p>The Jenkins build <b>${env.JOB_NAME}</b> with build number <b>${env.BUILD_NUMBER}</b> has failed due to the Quality Gate not passing.</p>
+                        <p>Please review the SonarQube results and address any issues.</p>
+                        <p>Regards,<br>DevOps Team</p>
+                        """,
+                        mimeType: 'text/html'
+                    )
+                    error("Pipeline aborted due to failing Quality Gate")
+                }
+            }
+        }
+        stage("Upload artifacts to jfrog artifactory")
+        {
+            steps
+            {
+                rtUpload(
+                    serverId: 'artifactory-server',
+                    spec:'''{
+                        "files":[
+                        {
+                            "pattern": "*.war",
+                            "target": "demo-project-local/"
+                        }
+                    ]
+                    }''',
+                    )
+                    rtPublishBuildInfo( serverId:"artifactory-server" )
+                    
+            }
         }
         stage("Maven Build: maven"){
             when { expression { params.action == 'create' } }
