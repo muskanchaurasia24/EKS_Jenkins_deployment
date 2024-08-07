@@ -59,8 +59,7 @@ pipeline{
             }
             post {
                 failure {
-                    emailext to: 'muskaann2024@gmail.com',
-                        subject: "Jenkins: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Quality Gate Failed",
+                    emailext subject: "Jenkins: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Quality Gate Failed",
                         body: """
                         <p>Hi Team,</p>
                         <p>The Jenkins build <b>${env.JOB_NAME}</b> with build number <b>${env.BUILD_NUMBER}</b> has failed due to the Quality Gate not passing.</p>
