@@ -106,11 +106,32 @@
     <target>1.8</target>
     </configuration>
   </plugin>
-  <plugin>
+   <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
-          </plugin>
+            <version>0.8.8</version>
+            <executions>
+                <execution>
+                    <id>prepare-agent</id>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>report</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/site/jacoco</outputDirectory>
+                        <reportFormats>
+                            <reportFormat>xml</reportFormat>
+                        </reportFormats>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
   </plugins>
     </build>
     </project>
