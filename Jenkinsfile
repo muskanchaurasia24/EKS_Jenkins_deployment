@@ -59,8 +59,7 @@ pipeline{
             }
             post {
                 failure {
-                    emailext (
-                        to: 'muskan.chaurasia@nagarro.com',
+                    emailext to: 'muskan.chaurasia@nagarro.com',
                         subject: "Jenkins: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Quality Gate Failed",
                         body: """
                         <p>Hi Team,</p>
@@ -69,7 +68,6 @@ pipeline{
                         <p>Regards,<br>DevOps Team</p>
                         """,
                         mimeType: 'text/html'
-                    )
                     error("Pipeline aborted due to failing Quality Gate")
                 }
             }
