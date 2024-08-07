@@ -44,7 +44,7 @@ pipeline{
             steps{
                 script{
                     withSonarQubeEnv("sonarqube-api"){
-                    sh 'mvn -f Java_app/pom.xml clean verify sonar:sonar -Dsonar.jacoco.reportPaths=target/site/jacoco/jacoco.xml'
+                    sh 'mvn -f Java_app/pom.xml clean verify sonar:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco/jacoco.xml'
                     }
                 }
             }
