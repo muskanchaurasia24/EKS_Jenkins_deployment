@@ -59,7 +59,7 @@ pipeline{
             }
             post {
                 failure {
-                    emailext to: 'muskan.chaurasia@nagarro.com',
+                    emailext to: 'muskaann2024@gmail.com',
                         subject: "Jenkins: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Quality Gate Failed",
                         body: """
                         <p>Hi Team,</p>
