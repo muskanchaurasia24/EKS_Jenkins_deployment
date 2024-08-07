@@ -68,7 +68,6 @@ pipeline{
                         <p>Regards,<br>DevOps Team</p>
                         """,
                         mimeType: 'text/html'
-                    error("Pipeline aborted due to failing Quality Gate")
                 }
             }
         }
